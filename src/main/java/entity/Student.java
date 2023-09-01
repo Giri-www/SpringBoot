@@ -1,12 +1,18 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 
@@ -25,7 +31,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Student {
-
+private static final long serialVersionUID = 1L;
 @Id
 @GeneratedValue(strategy = GenerationType.AUTO)
 long id ;
@@ -39,8 +45,12 @@ String userName;
 @Column(nullable=false)
 private String password;
 
-@Column(nullable=false)
-private Collection <Role> roles;
+ @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinTable(
+     name="roles",
+     joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
+     inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
+private Collection <Role> roles = new ArrayList<>();
     
 
 }
